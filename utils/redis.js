@@ -1,8 +1,7 @@
 // Redis utils
 
 import { promisify } from 'util';
-
-const redis = require('redis');
+import redis from 'redis';
 
 // Constructor that creates a client to Redis
 class RedisClient {
