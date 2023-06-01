@@ -3,6 +3,7 @@ const thumbnail = require('image-thumbnail');
 const dbClient = require('./utils/db');
 
 const fileQueue = new Queue('fileQueue');
+const userQueue = new Queue('userQueue');
 
 fileQueue.process(async (job) => {
   const { fileId = null, userId = null } = job.data;
@@ -36,4 +37,22 @@ fileQueue.process(async (job) => {
   await Promise.all(thumbnailPromises);
 });
 
+userQueue.process(async (job) => {
+  const { userId } = job.data;
+
+  if (!userId) {
+    throw new Error('Missing userId');
+  }
+
+  const users = dbClient.db.collection('users');
+  const user = await users.findOne({ _id: userId });
+
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  console.log(`Welcome ${user.email}!`);
+});
+
+module.exports = userQueue;
 module.exports = fileQueue;
