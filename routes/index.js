@@ -3,6 +3,7 @@ import AppController from '../controllers/AppController';
 import UsersController from '../controllers/UsersController';
 import AuthController from '../controllers/AuthController';
 import FilesController from '../controllers/FilesController';
+import { createFileThumbnail } from '../workers/fileWorker';
 
 const router = Router();
 
@@ -18,7 +19,8 @@ router.get('/disconnect', AuthController.getDisconnect);
 
 router.get('/users/me', UsersController.getMe);
 
-router.post('/files', FilesController.postUpload);
+// router.post('/files', FilesController.postUpload);
+router.post('/files', FilesController.storeFile, createFileThumbnail);
 
 router.get('/files/:id', FilesController.getShow);
 
